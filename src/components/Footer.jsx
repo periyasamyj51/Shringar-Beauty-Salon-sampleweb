@@ -3,7 +3,7 @@ import BackgroundVideo from './BackgroundVideo.jsx';
 function Footer({ mapUrl }) {
   return (
     <footer id="contact">
-      <BackgroundVideo className="footer-bg-video" src="/videos/12322774-hd_1920_1080_30fps.mp4" />
+      <BackgroundVideo className="footer-bg-video" src="/videos/12322774-hd_1920_1080_30fps.mp4" poster="/images/shringar-beauty-salon-nungambakkam-chennai-beauty-parlours-qet7cbml6l.jpg" />
       <div className="footer-grid">
         <div className="footer-col">
           <h4>Navigate</h4>

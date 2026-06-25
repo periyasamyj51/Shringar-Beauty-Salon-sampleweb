@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
-function BackgroundVideo({ className, src }) {
+function BackgroundVideo({ className, src, poster }) {
   const videoRef = useRef(null);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -16,11 +17,14 @@ function BackgroundVideo({ className, src }) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const nextVisible = entry.isIntersecting && entry.intersectionRatio >= 0.12;
+        const nextVisible = entry.isIntersecting;
         setIsVisible(nextVisible);
-        setShouldLoad(nextVisible);
+
+        if (nextVisible) {
+          setShouldLoad(true);
+        }
       },
-      { threshold: 0.12 }
+      { rootMargin: '220px 0px', threshold: 0.01 }
     );
 
     observer.observe(video);
@@ -35,10 +39,12 @@ function BackgroundVideo({ className, src }) {
       return undefined;
     }
 
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+
     if (!shouldLoad) {
       video.pause();
-      video.removeAttribute('src');
-      video.load();
       return undefined;
     }
 
@@ -59,13 +65,18 @@ function BackgroundVideo({ className, src }) {
   return (
     <video
       ref={videoRef}
-      className={className}
+      className={`${className} ${isLoaded ? 'is-loaded' : ''}`}
       src={shouldLoad ? src : undefined}
+      poster={poster}
+      autoPlay
       muted
+      defaultMuted
       loop
       playsInline
-      preload="none"
+      preload="metadata"
       aria-hidden="true"
+      onLoadedData={() => setIsLoaded(true)}
+      onCanPlay={() => setIsLoaded(true)}
     />
   );
 }

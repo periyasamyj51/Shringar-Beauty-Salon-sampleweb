@@ -8,7 +8,7 @@ function BookingSection() {
 
   return (
     <section className="booking" id="booking">
-      <BackgroundVideo className="booking-bg-video" src="/videos/7509480-hd_1920_1080_25fps.mp4" />
+      <BackgroundVideo className="booking-bg-video" src="/videos/7509480-hd_1920_1080_25fps.mp4" poster="/images/shringar-beauty-salon-nungambakkam-chennai-beauty-parlours-eegnpnr33u.jpg" />
       <div className="booking-services">
         <div className="service-pill">
           <div className="service-icon">&#9986;</div>

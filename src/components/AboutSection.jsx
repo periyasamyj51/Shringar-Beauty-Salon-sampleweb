@@ -3,7 +3,7 @@ import BackgroundVideo from './BackgroundVideo.jsx';
 function AboutSection() {
   return (
     <section className="intro video-section" id="about">
-      <BackgroundVideo className="section-bg-video" src="/videos/7291967-uhd_3840_2160_25fps.mp4" />
+      <BackgroundVideo className="section-bg-video" src="/videos/7291967-uhd_3840_2160_25fps.mp4" poster="/images/shringar-beauty-salon-chennai-beauty-parlours-ep4wpm3gfv.jpg" />
       <div className="section-video-overlay"></div>
       <div className="intro-left">
         <span className="eyebrow">Based in Nungambakkam, Chennai</span>

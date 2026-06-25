@@ -3,7 +3,7 @@ import BackgroundVideo from './BackgroundVideo.jsx';
 function ServicesSection() {
   return (
     <section className="stylists video-section service-video-section" id="stylists">
-      <BackgroundVideo className="section-bg-video" src="/videos/9218215-hd_1920_1080_30fps.mp4" />
+      <BackgroundVideo className="section-bg-video" src="/videos/9218215-hd_1920_1080_30fps.mp4" poster="/images/shringar-beauty-salon-nungambakkam-chennai-beauty-parlours-11v5au4mzm.jpg" />
       <div className="section-video-overlay"></div>
       <span className="eyebrow">Our Services</span>
       <h2>Beauty Services At Shringar</h2>

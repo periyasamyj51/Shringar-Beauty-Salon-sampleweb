@@ -4,6 +4,7 @@ export const mapUrl =
 export const videoSlides = [
   {
     src: '/videos/3181732-uhd_3840_2160_25fps.mp4',
+    poster: '/images/shringar-beauty-salon-nungambakkam-chennai-beauty-spas-o1v08td9sk.jpg',
     label: 'Salon glow',
     theme: {
       base: '#15110f',
@@ -15,6 +16,7 @@ export const videoSlides = [
   },
   {
     src: '/videos/14634421_1920_1080_24fps.mp4',
+    poster: '/images/shringar-beauty-salon-nungambakkam-chennai-beauty-parlours-09y6l155pu.jpg',
     label: 'Beauty detail',
     theme: {
       base: '#111618',
@@ -26,6 +28,7 @@ export const videoSlides = [
   },
   {
     src: '/videos/6958314-uhd_4096_2160_25fps.mp4',
+    poster: '/images/shringar-beauty-salon-nungambakkam-chennai-beauty-parlours-11v5au4mzm.jpg',
     label: 'Luxury care',
     theme: {
       base: '#17110d',
@@ -37,6 +40,7 @@ export const videoSlides = [
   },
   {
     src: '/videos/12642458_1920_1080_50fps.mp4',
+    poster: '/images/shringar-beauty-salon-nungambakkam-chennai-beauty-parlours-qet7cbml6l.jpg',
     label: 'Signature styling',
     theme: {
       base: '#121114',

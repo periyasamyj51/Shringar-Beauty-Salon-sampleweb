@@ -4,8 +4,10 @@ import { renderAnimatedLetters, renderAnimatedSentence } from '../utils/animated
 
 function Hero() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [readyVideoSrc, setReadyVideoSrc] = useState(null);
   const videoRef = useRef(null);
   const currentSlide = videoSlides[activeSlide];
+  const isVideoReady = readyVideoSrc === currentSlide.src;
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -23,6 +25,10 @@ function Hero() {
     if (!video) {
       return undefined;
     }
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
 
     const syncPlayback = () => {
       if (document.hidden) {
@@ -51,15 +57,19 @@ function Hero() {
       <div className="hero-photo hero-video-slider">
         <video
           ref={videoRef}
-          className="hero-video active"
+          className={`hero-video ${isVideoReady ? 'active' : ''}`}
           key={currentSlide.src}
           src={currentSlide.src}
+          poster={currentSlide.poster}
           autoPlay
           muted
+          defaultMuted
           loop
           playsInline
           preload="auto"
           aria-hidden="true"
+          onLoadedData={() => setReadyVideoSrc(currentSlide.src)}
+          onCanPlay={() => setReadyVideoSrc(currentSlide.src)}
         />
         <div className="hair-strand"></div>
         <div className="hero-slider-controls" aria-label="Landing video controls">
