@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 function BackgroundVideo({ className, src, poster }) {
   const videoRef = useRef(null);
@@ -6,15 +6,46 @@ function BackgroundVideo({ className, src, poster }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
+  const prepareVideo = useCallback(() => {
     const video = videoRef.current;
 
-    if (!video || !('IntersectionObserver' in window)) {
-      setShouldLoad(true);
-      setIsVisible(true);
-      return undefined;
+    if (!video) {
+      return null;
     }
 
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+
+    return video;
+  }, []);
+
+  const playWhenReady = useCallback(() => {
+    const video = prepareVideo();
+
+    if (!video || document.hidden || !isVisible || !shouldLoad) {
+      return;
+    }
+
+    video.play().catch(() => {});
+  }, [isVisible, prepareVideo, shouldLoad]);
+
+  useEffect(() => {
+    const video = prepareVideo();
+
+    if (!video || !('IntersectionObserver' in window)) {
+      const frame = window.requestAnimationFrame(() => {
+        setShouldLoad(true);
+        setIsVisible(true);
+      });
+
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const observedElement = video.parentElement || video;
     const observer = new IntersectionObserver(
       ([entry]) => {
         const nextVisible = entry.isIntersecting;
@@ -24,24 +55,20 @@ function BackgroundVideo({ className, src, poster }) {
           setShouldLoad(true);
         }
       },
-      { rootMargin: '220px 0px', threshold: 0.01 }
+      { rootMargin: '320px 0px', threshold: 0.01 }
     );
 
-    observer.observe(video);
+    observer.observe(observedElement);
 
     return () => observer.disconnect();
-  }, []);
+  }, [prepareVideo]);
 
   useEffect(() => {
-    const video = videoRef.current;
+    const video = prepareVideo();
 
     if (!video) {
       return undefined;
     }
-
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
 
     if (!shouldLoad) {
       video.pause();
@@ -51,16 +78,32 @@ function BackgroundVideo({ className, src, poster }) {
     const syncPlayback = () => {
       if (document.hidden || !isVisible) {
         video.pause();
-      } else {
-        video.play().catch(() => {});
+        return;
       }
+
+      playWhenReady();
     };
 
     syncPlayback();
-    document.addEventListener('visibilitychange', syncPlayback);
 
-    return () => document.removeEventListener('visibilitychange', syncPlayback);
-  }, [shouldLoad, isVisible]);
+    video.addEventListener('loadedmetadata', playWhenReady);
+    video.addEventListener('loadeddata', playWhenReady);
+    video.addEventListener('canplay', playWhenReady);
+    window.addEventListener('pageshow', playWhenReady);
+    window.addEventListener('focus', playWhenReady);
+    document.addEventListener('visibilitychange', syncPlayback);
+    document.addEventListener('touchstart', playWhenReady, { passive: true });
+
+    return () => {
+      video.removeEventListener('loadedmetadata', playWhenReady);
+      video.removeEventListener('loadeddata', playWhenReady);
+      video.removeEventListener('canplay', playWhenReady);
+      window.removeEventListener('pageshow', playWhenReady);
+      window.removeEventListener('focus', playWhenReady);
+      document.removeEventListener('visibilitychange', syncPlayback);
+      document.removeEventListener('touchstart', playWhenReady);
+    };
+  }, [isVisible, playWhenReady, prepareVideo, shouldLoad]);
 
   return (
     <video

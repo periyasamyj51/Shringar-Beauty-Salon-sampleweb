@@ -1415,8 +1415,7 @@ footer::after{
 .newsletter,
 .stylists,
 .review-spotlight,
-.gallery,
-footer{
+.gallery{
   content-visibility:auto;
   contain-intrinsic-size:900px;
 }
